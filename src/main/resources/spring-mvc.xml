@@ -19,31 +19,36 @@
     <!-- 静态文件处理  -->
     <!-- location:表示/assets/目录下（即服务器根目录）的static包下的所有文件 -->
     <!-- mapping:表示以/static开头的所有请求路径，如/static/a 或者/static/a/b -->
-   <!-- <mvc:resources location="/assets/" mapping="/public/**/" />-->
- 
-    <!--避免IE执行AJAX时，返回JSON出现下载文件 -->  
-    <bean id="mappingJacksonHttpMessageConverter"
-        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
-        <property name="supportedMediaTypes">  
-            <list>  
-                <value>text/html;charset=UTF-8</value>  
-            </list>  
-        </property>  
+    <mvc:annotation-driven > <!--不加这行在配置静态资源后会导致controller请求找不到-->
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes" value="text/html;charset=UTF-8"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <mvc:resources location="/assets/" mapping="/assets/**/" />
+
+
+    <!-- 模板解析器  -->
+    <bean id="templateResolver"
+          class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/templates/"/>
+        <property name="suffix" value=".html"/>
+        <property name="templateMode" value="HTML5"/>
+        <!-- 缓存--><property name="cacheable" value="false"/>
+        <property name="characterEncoding" value="UTF-8"/>
     </bean>
-    <!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->  
-    <bean
-        class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">  
-        <property name="messageConverters">  
-            <list>  
-                <ref bean="mappingJacksonHttpMessageConverter" /> <!-- JSON转换器 -->
-            </list>  
-        </property>  
-    </bean>  
-    <!-- 定义跳转的文件的前后缀 ，视图模式配置-->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
-        <property name="prefix" value="/WEB-INF/jsp/" />
-        <property name="suffix" value=".jsp" />
+
+    <bean id="templateEngine"
+          class="org.thymeleaf.spring4.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver"/>
     </bean>
-    
+    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine"/>
+        <property name="order" value="1"/>
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
+
 </beans>
   

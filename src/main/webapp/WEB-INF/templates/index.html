@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script type="text/javascript" src="/assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#queryButton").click(function () {
+                window.location.href = "/ssmUser/query";
+            });
+        });
+
+    </script>
+</head>
+<body>
+<form id="form1" method="post" action="/ssmUser/add">
+    pname: <input type="text" id="pname" name="pname" />
+    password: <input type="password" id="password" name="password">
+    <input type="submit"/>
+</form>
+<br/>
+<button id="queryButton" >查询</button>
+
+</body>
+</html>
