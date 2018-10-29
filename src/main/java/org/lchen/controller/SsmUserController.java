@@ -1,6 +1,6 @@
 package org.lchen.controller;
 
-import org.lchen.service.SsmUserServiceImpl;
+import org.lchen.service.SsmUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 public class SsmUserController {
 
     @Resource
-    private SsmUserServiceImpl ssmUserService;
+    private SsmUserService ssmUserService;
 
     @RequestMapping("/add")
     @ResponseBody
@@ -24,6 +24,14 @@ public class SsmUserController {
 
     @RequestMapping("/query")
     public String query(Model model) {
+        String ssmUsers = ssmUserService.queryAll();
+        model.addAttribute("ssmUsers",ssmUsers);
+        return "ssmUser";
+    }
+
+    @RequestMapping("saveTx")
+    public String testTx(@RequestParam("pname") String pname, Model model) {
+        ssmUserService.saveTest(pname);
         String ssmUsers = ssmUserService.queryAll();
         model.addAttribute("ssmUsers",ssmUsers);
         return "ssmUser";
